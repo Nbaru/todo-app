@@ -2,6 +2,7 @@ import { useGetTasksQuery } from "./tasksApiSlice";
 
 export const TaskList = () => {
   const { data: tasks, isError, isLoading, isSuccess } = useGetTasksQuery();
+  //todo cancel
 
   if (isError) {
     return (

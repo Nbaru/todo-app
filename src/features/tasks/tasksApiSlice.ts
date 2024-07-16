@@ -4,19 +4,28 @@ type Task = {
   readonly id: string;
   readonly text: string;
   readonly completed: boolean;
-  readonly createdDate: null;
-  readonly completedDate: null;
+  readonly createdDate: number;
+  readonly completedDate: number;
 };
 
 export const tasksApiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080" }),
-  reducerPath: "todosApi",
-  tagTypes: ["tasks"],
+  reducerPath: "tasksApi",
+  tagTypes: ["Task"],
   endpoints: build => ({
     getTasks: build.query<ReadonlyArray<Task>, void>({
       query: () => "/tasks",
+      providesTags: ["Task"],
+    }),
+    addNewTask: build.mutation<Task, string>({
+      query: text => ({
+        url: "/tasks",
+        method: "POST",
+        body: { text },
+      }),
+      invalidatesTags: ["Task"],
     }),
   }),
 });
 
-export const { useGetTasksQuery } = tasksApiSlice;
+export const { useGetTasksQuery, useAddNewTaskMutation } = tasksApiSlice;
