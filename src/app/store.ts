@@ -1,18 +1,14 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { tasksApiSlice } from "../features/tasks/tasksApiSlice";
+import { tasksSlice } from "../features/tasks/tasksSlice";
 
-const rootReducer = combineSlices(tasksApiSlice);
+const rootReducer = combineSlices(tasksSlice);
 export type RootState = ReturnType<typeof rootReducer>;
 
 export const makeStore = (preloadedState?: Partial<RootState>) => {
   const store = configureStore({
     reducer: rootReducer,
-    middleware: getDefaultMiddleware => {
-      return getDefaultMiddleware().concat(tasksApiSlice.middleware);
-    },
-    preloadedState,
   });
   setupListeners(store.dispatch);
   return store;

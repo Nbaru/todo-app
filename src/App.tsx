@@ -1,11 +1,10 @@
 import { TaskList } from "./features/tasks/TaskList";
-import { useAddNewTaskMutation } from "./features/tasks/tasksApiSlice";
+import { AddNewTask } from "./features/tasks/AddNewTask";
 
 export const App = () => {
-  const [addNewTask] = useAddNewTaskMutation();
   return (
     <>
-      <button onClick={() => addNewTask("hardcoded text")}>add new task</button>
+      <AddNewTask />
       <div>
         Tasky:
         <TaskList />
