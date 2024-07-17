@@ -1,21 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-type Task = {
-  readonly id: string;
-  readonly text: string;
-  readonly completed: boolean;
-  readonly createdDate: number | null;
-  readonly completedDate?: number;
-};
-
-type Store = {
-  readonly allTasks: ReadonlyArray<Task>;
-  readonly status: "idle" | "loading" | "succeeded" | "failed";
-  readonly error: string | null;
-};
+import type { Store, ServerTask } from "./types";
 
 const initialState: Store = {
-  allTasks: [],
+  allIds: [],
+  byId: [],
   status: "idle",
   error: null,
 };
@@ -25,8 +13,8 @@ export const tasksSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectAllTasks: s => s.allTasks,
-    selectTaskById: (s, id) => s.allTasks.find(task => task.id === id),
+    selectAllTasksIds: s => s.allIds,
+    selectTaskById: (s, id) => s.byId.find(task => task.id === id),
   },
   extraReducers(builder) {
     builder
@@ -35,7 +23,9 @@ export const tasksSlice = createSlice({
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.allTasks = [...action.payload]; //@todo: map is better (allIds, byId)
+        state.allIds = action.payload.map((task: ServerTask) => task.id);
+        state.byId = action.payload;
+        console.log(state.byId);
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.status = "failed";
@@ -43,12 +33,13 @@ export const tasksSlice = createSlice({
       })
 
       .addCase(addNewTask.fulfilled, (state, action) => {
-        state.allTasks.push(action.payload);
+        state.allIds.push(action.payload.id);
+        state.byId.push(action.payload);
       });
   },
 });
 
-export const { selectAllTasks, selectTaskById } = tasksSlice.selectors;
+export const { selectAllTasksIds, selectTaskById } = tasksSlice.selectors;
 
 const baseUrl = "http://localhost:8080";
 

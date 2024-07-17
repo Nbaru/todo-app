@@ -1,9 +1,9 @@
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, MouseEvent as ReactMouseEvent } from "react";
 import { useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { addNewTask } from "./tasksSlice";
+import { useAppDispatch } from "../../../app/hooks";
+import { addNewTask } from "../tasksSlice";
 
-export const AddNewTask = () => {
+export const AddNewTask: React.FC = () => {
   const [text, setText] = useState("");
 
   const dispatch = useAppDispatch();
@@ -11,18 +11,20 @@ export const AddNewTask = () => {
   const onTaskTextChanged = (e: ChangeEvent<HTMLInputElement>) =>
     setText(e.target.value);
 
-  const onSaveTaskClicked = () => {
+  const onSaveTaskClicked = (
+    e: ReactMouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     if (!text) {
       return;
     }
 
+    e.preventDefault();
     dispatch(addNewTask(text));
     setText("");
   };
 
   return (
     <section>
-      <h2>Add a task</h2>
       <form>
         <label htmlFor="taskText">Task:</label>
         <input
@@ -32,10 +34,17 @@ export const AddNewTask = () => {
           value={text}
           onChange={onTaskTextChanged}
         />
-        <button onClick={onSaveTaskClicked} type="button">
+
+        <button
+          className="btn btn-primary"
+          onClick={onSaveTaskClicked}
+          type="submit"
+        >
           Save task
         </button>
       </form>
     </section>
   );
 };
+
+AddNewTask.displayName = "AddNewTask";
