@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { Store, ServerTask } from "./types";
+import type { Store, ServerTask, Guid, ClientTask } from "./types";
 
 const initialState: Store = {
   allIds: [],
@@ -25,7 +25,6 @@ export const tasksSlice = createSlice({
         state.status = "succeeded";
         state.allIds = action.payload.map((task: ServerTask) => task.id);
         state.byId = action.payload;
-        console.log(state.byId);
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.status = "failed";
@@ -35,6 +34,16 @@ export const tasksSlice = createSlice({
       .addCase(addNewTask.fulfilled, (state, action) => {
         state.allIds.push(action.payload.id);
         state.byId.push(action.payload);
+      })
+
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        const allIdsIndex = state.allIds.indexOf(action.payload);
+        const byIdIndex = state.byId.findIndex(
+          (task: ClientTask) => task.id === action.payload,
+        );
+
+        state.allIds.splice(allIdsIndex, 1);
+        state.byId.splice(byIdIndex, 1);
       });
   },
 });
@@ -59,5 +68,17 @@ export const addNewTask = createAsyncThunk(
     });
 
     return response.json();
+  },
+);
+
+export const deleteTask = createAsyncThunk(
+  "tasks/deleteTask",
+  async (id: Guid) => {
+    await fetch(`${baseUrl}/tasks/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    return id;
   },
 );
