@@ -36,6 +36,14 @@ export const tasksSlice = createSlice({
         state.byId.push(action.payload);
       })
 
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.byId = state.byId.map(task =>
+          task.id === action.payload.id
+            ? { ...task, text: action.payload.text }
+            : task,
+        );
+      })
+
       .addCase(deleteTask.fulfilled, (state, action) => {
         const allIdsIndex = state.allIds.indexOf(action.payload);
         const byIdIndex = state.byId.findIndex(
@@ -65,6 +73,23 @@ export const addNewTask = createAsyncThunk(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
+    });
+
+    return response.json();
+  },
+);
+
+type UpdateData = {
+  readonly id: Guid;
+  readonly text: string;
+};
+export const updateTask = createAsyncThunk(
+  "tasks/update",
+  async (data: UpdateData) => {
+    const response = await fetch(`${baseUrl}/tasks/${data.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: data.text }),
     });
 
     return response.json();
