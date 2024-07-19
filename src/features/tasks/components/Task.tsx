@@ -5,12 +5,12 @@ export const Task: React.FC<{
   readonly task: ClientTask;
   readonly controls: ReactNode;
 }> = ({ task, controls }) => (
-  <div className="flex justify-between items-center space-x-4 bg-neutral rounded-xl px-4">
-    <label className="label cursor-pointer grow flex justify-start space-x-2">
+  <div className="flex items-center justify-between space-x-4 rounded-xl bg-neutral px-4">
+    <label className="label flex grow cursor-pointer justify-start space-x-2">
       <input
         type="checkbox"
         defaultChecked={!!task.completed}
-        className="checkbox checkbox-primary"
+        className="checkbox-primary checkbox"
       />
       <span className="label-text">{task.text}</span>
     </label>

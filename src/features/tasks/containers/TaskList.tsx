@@ -22,4 +22,4 @@ export const TaskList: React.FC = () => {
   return <Component status={status} error={error} ids={tasksIds} />;
 };
 
-TaskList.displayname = "TaskList";
+TaskList.displayName = "TaskList";

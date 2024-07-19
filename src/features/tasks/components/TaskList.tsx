@@ -12,7 +12,7 @@ export const TaskList: React.FC<{
 
   if (status === "loading") {
     return (
-      <div className="flex justify-center align-middle mt-10">
+      <div className="mt-10 flex justify-center align-middle">
         <span className="loading loading-dots loading-lg"></span>
       </div>
     );
