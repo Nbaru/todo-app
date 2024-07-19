@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import type { Store, ServerTask, Guid, ClientTask } from "./types";
 
 const initialState: Store = {
@@ -14,7 +18,15 @@ export const tasksSlice = createSlice({
   reducers: {},
   selectors: {
     selectAllTasksIds: s => s.allIds,
-    selectTaskById: (s, id) => s.byId.find(task => task.id === id),
+    selectActiveTasksIds: s =>
+      s.byId.filter(t => t.completed === false).map(t => t.id), //@todo: memoizovat?
+    selectDoneTasksIds: s =>
+      s.byId.filter(t => t.completed === true).map(t => t.id), //@todo: memoizovat?
+    selectTaskById: (s, id) => s.byId.find(t => t.id === id),
+    selectStatus: s => s.status,
+    selectError: s => s.error,
+    selectTaskCount: s => s.allIds.length,
+    selectDoneTaskCount: s => s.byId.filter(t => t.completed).length,
   },
   extraReducers(builder) {
     builder
@@ -78,7 +90,16 @@ export const tasksSlice = createSlice({
   },
 });
 
-export const { selectAllTasksIds, selectTaskById } = tasksSlice.selectors;
+export const {
+  selectAllTasksIds,
+  selectActiveTasksIds,
+  selectDoneTasksIds,
+  selectTaskById,
+  selectStatus,
+  selectError,
+  selectTaskCount,
+  selectDoneTaskCount,
+} = tasksSlice.selectors;
 
 const baseUrl = "http://localhost:8080";
 
