@@ -6,7 +6,7 @@ import { Icon } from "../../shared/Icon";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { EditTask } from "../components/EditTask";
-import { TaskLabel } from "../components/TaskLabel";
+import { TaskLabel } from "../containers/TaskLabel";
 
 export const Task: React.FC<{ readonly id: Guid }> = ({ id }) => {
   const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ export const Task: React.FC<{ readonly id: Guid }> = ({ id }) => {
   ) : (
     <Component
       renderContent={() => (
-        <TaskLabel completed={task.completed} text={task.text} />
+        <TaskLabel completed={task.completed} text={task.text} id={task.id} />
       )}
       renderControls={() => (
         <>

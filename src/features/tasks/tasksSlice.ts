@@ -32,14 +32,36 @@ export const tasksSlice = createSlice({
       })
 
       .addCase(addNewTask.fulfilled, (state, action) => {
-        state.allIds.push(action.payload.id);
-        state.byId.push(action.payload);
+        state.allIds.unshift(action.payload.id);
+        state.byId.unshift(action.payload);
       })
 
       .addCase(updateTask.fulfilled, (state, action) => {
-        state.byId = state.byId.map(task =>
+        state.byId = state.byId.map((task: ClientTask) =>
           task.id === action.payload.id
             ? { ...task, text: action.payload.text }
+            : task,
+        );
+      })
+
+      .addCase(completeTask.fulfilled, (state, action) => {
+        state.byId = state.byId.map((task: ClientTask) =>
+          task.id === action.payload.id
+            ? {
+                ...task,
+                completed: action.payload.completed,
+                completedDate: action.payload.completedDate,
+              }
+            : task,
+        );
+      })
+      .addCase(incompleteTask.fulfilled, (state, action) => {
+        state.byId = state.byId.map((task: ClientTask) =>
+          task.id === action.payload.id
+            ? {
+                ...task,
+                completed: action.payload.completed,
+              }
             : task,
         );
       })
@@ -96,12 +118,33 @@ export const updateTask = createAsyncThunk(
   },
 );
 
+export const completeTask = createAsyncThunk(
+  "tasks/complete",
+  async (id: Guid) => {
+    const response = await fetch(`${baseUrl}/tasks/${id}/complete`, {
+      method: "POST",
+    });
+
+    return response.json();
+  },
+);
+
+export const incompleteTask = createAsyncThunk(
+  "tasks/incomplete",
+  async (id: Guid) => {
+    const response = await fetch(`${baseUrl}/tasks/${id}/incomplete`, {
+      method: "POST",
+    });
+
+    return response.json();
+  },
+);
+
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (id: Guid) => {
     await fetch(`${baseUrl}/tasks/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
     });
 
     return id;
