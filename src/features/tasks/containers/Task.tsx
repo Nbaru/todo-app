@@ -1,5 +1,10 @@
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { deleteTask, selectTaskById, updateTask } from "../tasksSlice";
+import {
+  deleteTask,
+  selectError,
+  selectTaskById,
+  updateTask,
+} from "../tasksSlice";
 import { Task as Component } from "../components/Task";
 import type { Guid } from "../types";
 import { Icon } from "../../shared/Icon";
@@ -7,18 +12,23 @@ import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { EditTask } from "../components/EditTask";
 import { TaskLabel } from "../containers/TaskLabel";
+import { Error } from "../../shared/Error";
 
 export const Task: React.FC<{ readonly id: Guid }> = ({ id }) => {
   const dispatch = useAppDispatch();
 
   const task = useAppSelector(s => selectTaskById(s, id));
+  const error = useAppSelector(selectError);
+
   const [isEditing, setIsEditing] = useState(false);
 
   if (!task) {
     return null;
   }
 
-  //@todo: error state
+  if (error) {
+    return <Error errorText={`${error}. Try reload page or contact us.`} />;
+  }
 
   return isEditing ? (
     <EditTask

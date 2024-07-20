@@ -1,3 +1,4 @@
+import { Error } from "../../shared/Error";
 import { Loader } from "../../shared/Loader";
 import { Task } from "../containers/Task";
 import type { Guid, Status } from "../types";
@@ -9,7 +10,7 @@ export const TaskList: React.FC<{
 }> = ({ ids, status, error }) => {
   //@todo: empty state
   if (error) {
-    return <div>{error}. Try reload page or contact us.</div>;
+    return <Error errorText={`${error}. Try reload page or contact us.`} />;
   }
 
   if (status === "loading") {

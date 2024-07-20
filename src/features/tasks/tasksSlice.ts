@@ -44,6 +44,10 @@ export const tasksSlice = createSlice({
         state.allIds.unshift(action.payload.id);
         state.byId.unshift(action.payload);
       })
+      .addCase(addNewTask.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? null;
+      })
 
       .addCase(updateTask.fulfilled, (state, action) => {
         state.byId = state.byId.map((task: ClientTask) =>
@@ -51,6 +55,10 @@ export const tasksSlice = createSlice({
             ? { ...task, text: action.payload.text }
             : task,
         );
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? null;
       })
 
       .addCase(completeTask.fulfilled, (state, action) => {
@@ -64,6 +72,11 @@ export const tasksSlice = createSlice({
             : task,
         );
       })
+      .addCase(completeTask.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? null;
+      })
+
       .addCase(incompleteTask.fulfilled, (state, action) => {
         state.byId = state.byId.map((task: ClientTask) =>
           task.id === action.payload.id
@@ -74,6 +87,10 @@ export const tasksSlice = createSlice({
             : task,
         );
       })
+      .addCase(incompleteTask.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? null;
+      })
 
       .addCase(deleteTask.fulfilled, (state, action) => {
         const allIdsIndex = state.allIds.indexOf(action.payload);
@@ -83,6 +100,10 @@ export const tasksSlice = createSlice({
 
         state.allIds.splice(allIdsIndex, 1);
         state.byId.splice(byIdIndex, 1);
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? null;
       });
   },
 });

@@ -16,7 +16,7 @@ export type ClientTask = {
 
 export type Guid = string;
 export type Status = "idle" | "loading" | "succeeded" | "failed";
-//todo: duplicity ??
+
 export type Store = {
   readonly allIds: ReadonlyArray<Guid>;
   readonly byId: ReadonlyArray<ClientTask>;
