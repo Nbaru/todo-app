@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
   fetchTasks,
-  selectActiveTasksIds,
+  getActiveTasksIds,
+  getDoneTasksIds,
   selectAllTasksIds,
-  selectDoneTasksIds,
   selectError,
   selectStatus,
 } from "../tasksSlice";
@@ -16,8 +16,8 @@ export const TaskList: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const tasksIds = useAppSelector(selectAllTasksIds);
-  const activeTasksIds = useAppSelector(selectActiveTasksIds);
-  const doneTasksIds = useAppSelector(selectDoneTasksIds);
+  const activeTasksIds = useAppSelector(getActiveTasksIds);
+  const doneTasksIds = useAppSelector(getDoneTasksIds);
   const status = useAppSelector(selectStatus);
   const error = useAppSelector(selectError);
 
@@ -34,7 +34,7 @@ export const TaskList: React.FC = () => {
         return doneTasksIds;
       default:
         console.log(
-          "The value is wrong. Only [all, active, done] is accepted.",
+          "The case value is wrong. Only [all, active, done] is accepted.",
         );
         return [];
     }

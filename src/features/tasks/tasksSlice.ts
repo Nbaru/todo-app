@@ -18,10 +18,7 @@ export const tasksSlice = createSlice({
   reducers: {},
   selectors: {
     selectAllTasksIds: s => s.allIds,
-    selectActiveTasksIds: s =>
-      s.byId.filter(t => t.completed === false).map(t => t.id), //@todo: memoizovat?
-    selectDoneTasksIds: s =>
-      s.byId.filter(t => t.completed === true).map(t => t.id), //@todo: memoizovat?
+    selectAllTasks: s => s.byId,
     selectTaskById: (s, id) => s.byId.find(t => t.id === id),
     selectStatus: s => s.status,
     selectError: s => s.error,
@@ -92,14 +89,20 @@ export const tasksSlice = createSlice({
 
 export const {
   selectAllTasksIds,
-  selectActiveTasksIds,
-  selectDoneTasksIds,
+  selectAllTasks,
   selectTaskById,
   selectStatus,
   selectError,
   selectTaskCount,
   selectDoneTaskCount,
 } = tasksSlice.selectors;
+
+export const getActiveTasksIds = createSelector([selectAllTasks], tasks =>
+  tasks.filter(t => t.completed === false).map(t => t.id),
+);
+export const getDoneTasksIds = createSelector([selectAllTasks], tasks =>
+  tasks.filter(t => t.completed).map(t => t.id),
+);
 
 const baseUrl = "http://localhost:8080";
 
