@@ -1,4 +1,4 @@
-import { Error } from "../../shared/Error";
+import { Alert } from "../../shared/Alert";
 import { Loader } from "../../shared/Loader";
 import { Task } from "../containers/Task";
 import type { Guid, Status } from "../types";
@@ -8,14 +8,20 @@ export const TaskList: React.FC<{
   readonly status: Status;
   readonly error: string | null;
 }> = ({ ids, status, error }) => {
-  //@todo: empty state
   if (error) {
-    return <Error errorText={`${error}. Try reload page or contact us.`} />;
+    return (
+      <Alert text={`${error}. Try reload page or contact us.`} type="error" />
+    );
   }
 
   if (status === "loading") {
     return <Loader />;
   }
+
+  if (!ids.length) {
+    return <Alert text="There are no tasks." type="info" />;
+  }
+
   return (
     <div className="space-y-3">
       {ids.map((id: Guid) => (

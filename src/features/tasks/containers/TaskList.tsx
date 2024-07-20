@@ -60,7 +60,6 @@ export const TaskList: React.FC = () => {
 
   // React intentionally renders components twice during development to help identify potential issues.
   // This double rendering triggers useEffect to run twice as well. This behavior is intentional and does not occur in production builds.
-  //@todo: cancel fetchind data on unmount
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchTasks());

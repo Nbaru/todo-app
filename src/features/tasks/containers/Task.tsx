@@ -12,7 +12,7 @@ import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { EditTask } from "../components/EditTask";
 import { TaskLabel } from "../containers/TaskLabel";
-import { Error } from "../../shared/Error";
+import { Alert } from "../../shared/Alert";
 
 export const Task: React.FC<{ readonly id: Guid }> = ({ id }) => {
   const dispatch = useAppDispatch();
@@ -27,7 +27,9 @@ export const Task: React.FC<{ readonly id: Guid }> = ({ id }) => {
   }
 
   if (error) {
-    return <Error errorText={`${error}. Try reload page or contact us.`} />;
+    return (
+      <Alert text={`${error}. Try reload page or contact us.`} type="error" />
+    );
   }
 
   return isEditing ? (
