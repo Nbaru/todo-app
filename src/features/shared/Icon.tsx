@@ -15,3 +15,5 @@ export const Icon: React.FC<{
     </div>
   );
 };
+
+Icon.displayName = "Icon";

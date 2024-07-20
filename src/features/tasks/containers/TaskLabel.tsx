@@ -22,3 +22,5 @@ export const TaskLabel: React.FC<{
     <Component completed={completed} text={text} toggleDone={toggleDone} />
   );
 };
+
+TaskLabel.displayName = "TaskLabel";

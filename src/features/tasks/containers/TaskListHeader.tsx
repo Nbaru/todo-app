@@ -12,3 +12,5 @@ export const TaskListHeader: React.FC<{
     {renderControl()}
   </div>
 );
+
+TaskListHeader.displayName = "TaskListHeader";

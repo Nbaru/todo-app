@@ -19,3 +19,5 @@ export const TaskCounter: React.FC = () => {
     />
   );
 };
+
+TaskCounter.displayName = "TaskCounter";

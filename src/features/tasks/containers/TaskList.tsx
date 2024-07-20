@@ -9,15 +9,9 @@ import {
   selectStatus,
 } from "../tasksSlice";
 import { TaskList as Component } from "../components/TaskList";
-import { FilterTasks } from "../components/FilterTasks";
 import type { FilterCondition } from "../components/FilterTasks";
-import { Icon } from "../../shared/Icon";
-import { faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { TaskListHeader } from "./TaskListHeader";
-import {
-  CompleteActiveTasks,
-  CompleteActiveTasksButton,
-} from "./CompleteActiveTasksButton";
+import { CompleteActiveTasksButton } from "./CompleteActiveTasksButton";
 import { DeleteDoneTasksButton } from "./DeleteDoneTasksButton";
 
 export const TaskList: React.FC = () => {
