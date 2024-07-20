@@ -11,6 +11,14 @@ import {
 import { TaskList as Component } from "../components/TaskList";
 import { FilterTasks } from "../components/FilterTasks";
 import type { FilterCondition } from "../components/FilterTasks";
+import { Icon } from "../../shared/Icon";
+import { faListCheck } from "@fortawesome/free-solid-svg-icons";
+import { TaskListHeader } from "./TaskListHeader";
+import {
+  CompleteActiveTasks,
+  CompleteActiveTasksButton,
+} from "./CompleteActiveTasksButton";
+import { DeleteDoneTasksButton } from "./DeleteDoneTasksButton";
 
 export const TaskList: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +48,22 @@ export const TaskList: React.FC = () => {
     }
   };
 
+  const getTasksHeaderControl = (filterCondition: FilterCondition) => {
+    switch (filterCondition) {
+      case "all":
+        return null;
+      case "active":
+        return <CompleteActiveTasksButton tasksIds={getTasksIds("active")} />;
+      case "done":
+        return <DeleteDoneTasksButton tasksIds={getTasksIds("done")} />;
+      default:
+        console.log(
+          "The case value is wrong. Only [all, active, done] is accepted.",
+        );
+        return null;
+    }
+  };
+
   // React intentionally renders components twice during development to help identify potential issues.
   // This double rendering triggers useEffect to run twice as well. This behavior is intentional and does not occur in production builds.
   //@todo: cancel fetchind data on unmount
@@ -51,7 +75,10 @@ export const TaskList: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <FilterTasks setFilterCondition={setFilterCondition} />
+      <TaskListHeader
+        setFilterCondition={setFilterCondition}
+        renderControl={() => getTasksHeaderControl(filterCondition)}
+      />
 
       <Component
         status={status}
