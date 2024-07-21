@@ -23,11 +23,11 @@ export const TaskList: React.FC<{
   }
 
   return (
-    <div className="space-y-3">
+    <ul className="space-y-3">
       {ids.map((id: Guid) => (
         <Task key={id} id={id} />
       ))}
-    </div>
+    </ul>
   );
 };
 
