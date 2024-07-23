@@ -5,6 +5,15 @@ import {
 } from "@reduxjs/toolkit";
 import type { Store, ServerTask, Guid, ClientTask } from "./types";
 
+const emptyTask: ClientTask = {
+  id: "",
+  text: "",
+  completed: false,
+  createdDate: null,
+  completedDate: null,
+  error: null,
+};
+
 const initialState: Store = {
   allIds: [],
   byId: [],
@@ -33,7 +42,10 @@ export const tasksSlice = createSlice({
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.allIds = action.payload.map((task: ServerTask) => task.id);
-        state.byId = action.payload;
+        state.byId = action.payload.map((task: ServerTask) => ({
+          ...emptyTask,
+          ...task,
+        }));
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.status = "failed";
@@ -42,7 +54,7 @@ export const tasksSlice = createSlice({
 
       .addCase(addNewTask.fulfilled, (state, action) => {
         state.allIds.unshift(action.payload.id);
-        state.byId.unshift(action.payload);
+        state.byId.unshift({ ...emptyTask, ...action.payload });
       })
       .addCase(addNewTask.rejected, (state, action) => {
         state.status = "failed";
@@ -83,6 +95,7 @@ export const tasksSlice = createSlice({
             ? {
                 ...task,
                 completed: action.payload.completed,
+                completedDate: null,
               }
             : task,
         );

@@ -11,7 +11,8 @@ export type ClientTask = {
   readonly text: string;
   readonly completed: boolean;
   readonly createdDate: number | null;
-  readonly completedDate?: number;
+  readonly completedDate: number | null;
+  readonly error: string | null;
 };
 
 export type Guid = string;
