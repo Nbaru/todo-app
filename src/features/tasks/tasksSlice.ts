@@ -57,8 +57,12 @@ export const tasksSlice = createSlice({
         state.byId.unshift({ ...emptyTask, ...action.payload });
       })
       .addCase(addNewTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message ?? null;
+        state.allIds.unshift(action.meta.arg);
+        state.byId.unshift({
+          ...emptyTask,
+          id: action.meta.arg,
+          error: action.error.message ?? null,
+        });
       })
 
       .addCase(updateTask.fulfilled, (state, action) => {
@@ -69,8 +73,11 @@ export const tasksSlice = createSlice({
         );
       })
       .addCase(updateTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message ?? null;
+        const task = state.byId.find(task => action.meta.arg.id === task.id);
+
+        if (task) {
+          task.error = action.error.message ?? null;
+        }
       })
 
       .addCase(completeTask.fulfilled, (state, action) => {
@@ -85,8 +92,11 @@ export const tasksSlice = createSlice({
         );
       })
       .addCase(completeTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message ?? null;
+        const task = state.byId.find(task => action.meta.arg === task.id);
+
+        if (task) {
+          task.error = action.error.message ?? null;
+        }
       })
 
       .addCase(incompleteTask.fulfilled, (state, action) => {
@@ -101,8 +111,11 @@ export const tasksSlice = createSlice({
         );
       })
       .addCase(incompleteTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message ?? null;
+        const task = state.byId.find(task => action.meta.arg === task.id);
+
+        if (task) {
+          task.error = action.error.message ?? null;
+        }
       })
 
       .addCase(deleteTask.fulfilled, (state, action) => {
@@ -115,8 +128,11 @@ export const tasksSlice = createSlice({
         state.byId.splice(byIdIndex, 1);
       })
       .addCase(deleteTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message ?? null;
+        const task = state.byId.find(task => action.meta.arg === task.id);
+
+        if (task) {
+          task.error = action.error.message ?? null;
+        }
       });
   },
 });

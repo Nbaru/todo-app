@@ -1,10 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import {
-  deleteTask,
-  selectError,
-  selectTaskById,
-  updateTask,
-} from "../tasksSlice";
+import { deleteTask, selectTaskById, updateTask } from "../tasksSlice";
 import { Task as Component } from "../components/Task";
 import type { Guid } from "../types";
 import { Icon } from "../../shared/Icon";
@@ -18,7 +13,6 @@ export const Task: React.FC<{ readonly id: Guid }> = ({ id }) => {
   const dispatch = useAppDispatch();
 
   const task = useAppSelector(s => selectTaskById(s, id));
-  const error = useAppSelector(selectError);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -26,9 +20,12 @@ export const Task: React.FC<{ readonly id: Guid }> = ({ id }) => {
     return null;
   }
 
-  if (error) {
+  if (task.error) {
     return (
-      <Alert text={`${error}. Try reload page or contact us.`} type="error" />
+      <Alert
+        text={`${task.error}. Try reload page or contact us.`}
+        type="error"
+      />
     );
   }
 
